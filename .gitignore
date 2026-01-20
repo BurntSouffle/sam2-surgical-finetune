@@ -1,0 +1,55 @@
+# Checkpoints and large files
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Data (user must download separately)
+endoscapes/
+data/
+
+# SAM2 repo (will be cloned separately)
+sam2/
+
+# Outputs
+outputs/
+*.png
+*.jpg
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.eggs/
+*.egg-info/
+*.egg
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+logs/
+
+# TensorBoard
+runs/
