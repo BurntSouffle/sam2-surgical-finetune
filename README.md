@@ -158,11 +158,11 @@ If you use this code in your research, please cite:
 
 ```bibtex
 @misc{sam2-surgical-finetune,
-  author = {Your Name},
+  author = {Abu Sufian Basith},
   title = {SAM2 Fine-tuning for Surgical Scene Segmentation},
   year = {2026},
   publisher = {GitHub},
-  url = {https://github.com/YOUR_USERNAME/sam2-surgical-finetune}
+  url = {https://github.com/BurntSouffle/sam2-surgical-finetune}
 }
 ```
 
