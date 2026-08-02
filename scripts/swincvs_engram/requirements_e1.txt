@@ -1,0 +1,68 @@
+# E1 Experiment: Visual Engrams for CVS Classification
+# Requirements file for SwinCVS-Engram experiment
+#
+# Install with:
+#   pip install -r requirements_e1.txt
+#
+# IMPORTANT: SAM2 must be installed separately as an editable package:
+#   pip install -e path/to/sam2/
+#
+# Example from sam2_finetune directory:
+#   pip install -e sam2/
+
+# =============================================================================
+# Core PyTorch
+# =============================================================================
+torch>=2.0.0
+torchvision>=0.15.0
+
+# =============================================================================
+# SwinV2 Backbone (REQUIRED - was missing!)
+# =============================================================================
+timm>=0.9.0
+
+# =============================================================================
+# Configuration
+# =============================================================================
+pyyaml>=6.0
+
+# =============================================================================
+# Image Processing
+# =============================================================================
+opencv-python-headless>=4.8.0
+# Note: Use opencv-python instead if you need GUI features (imshow, etc.)
+# opencv-python>=4.8.0
+pillow>=9.0.0
+
+# =============================================================================
+# Data Processing
+# =============================================================================
+pandas>=1.5.0
+numpy>=1.23.0
+
+# =============================================================================
+# Visualization (optional, for debugging)
+# =============================================================================
+matplotlib>=3.6.0
+
+# =============================================================================
+# Progress Bars
+# =============================================================================
+tqdm>=4.64.0
+
+# =============================================================================
+# Additional utilities
+# =============================================================================
+requests>=2.28.0  # For dataset download
+scipy>=1.10.0     # For some image operations
+
+# =============================================================================
+# SAM2 - MUST BE INSTALLED SEPARATELY
+# =============================================================================
+# SAM2 cannot be installed via pip from PyPI.
+# You must install it as an editable package from the local repository:
+#
+#   pip install -e sam2/
+#
+# This is required for the coarse segmentation model that generates
+# the GB and Tool masks for the engram channels.

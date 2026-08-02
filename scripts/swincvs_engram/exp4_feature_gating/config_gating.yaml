@@ -1,0 +1,65 @@
+# Configuration for Feature Gating Experiment (E4)
+# Architecture: RGB frames -> SwinV2 (frozen) -> features * sigmoid(MaskEncoder(masks)) -> LSTM -> output
+
+EXPERIMENT_NAME: 'E4_FeatureGating_v1'
+SEED: 5
+
+# Dataset
+DATASET_DIR: 'C:\Users\sufia\Documents\Uni\Masters\DISSERTATION'
+
+# Model settings
+MODEL:
+  FREEZE_BACKBONE: True  # Always freeze SwinV2
+  FREEZE_LSTM: False     # Fine-tune LSTM with gating
+  FEATURE_DIM: 1024      # SwinV2 output dimension
+  LSTM_HIDDEN_SIZE: 256
+  NUM_CLASSES: 3
+
+# MaskEncoder settings
+MASK_ENCODER:
+  INPUT_CHANNELS: 2      # GB + Tool masks
+  HIDDEN_CHANNELS: [32, 64, 128]  # CNN hidden dims
+  OUTPUT_DIM: 1024       # Must match FEATURE_DIM
+
+# Training
+TRAIN:
+  EPOCHS: 8
+  BATCH_SIZE: 2
+  LIMIT_DATA_FRACTION: 1  # 1 = 100%, 10 = 10%, etc.
+
+  # Optimizer
+  OPTIMIZER:
+    NAME: 'adamw'
+    LR: 0.001
+    WEIGHT_DECAY: 0.01
+    BETAS: [0.9, 0.999]
+    EPS: 1.0e-08
+
+  # Scheduler
+  LR_SCHEDULER:
+    NAME: 'cosine'
+    MIN_LR: 0.000001
+
+  # Loss
+  CLASS_WEIGHTS: [3.19852941, 4.46153846, 2.79518072]  # From original SwinCVS
+
+  # Data
+  TRANSFORMS:
+    ENDOSCAPES_MEAN: [0.485, 0.456, 0.406]
+    ENDOSCAPES_STD: [0.229, 0.224, 0.225]
+    CENTER_CROP: 480
+    TARGET_SIZE: 384
+
+  # Mask normalization
+  MASK_MEAN: [0.5, 0.5]
+  MASK_STD: [0.5, 0.5]
+
+# Checkpoints
+CHECKPOINTS:
+  SWINCVS: 'weights/SwinCVS_E2E_MC_IMNP_sd5_bestMAP.pt'
+  COARSE_MODEL: 'checkpoints/coarse_segmentation_v2/run_20260120_234049/best_model.pt'
+
+# Output
+OUTPUT:
+  RESULTS_DIR: 'results'
+  SAVE_BEST: True

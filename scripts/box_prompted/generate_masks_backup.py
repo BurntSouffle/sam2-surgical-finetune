@@ -216,9 +216,9 @@ def generate_mask(
     image_tensor: torch.Tensor,
     bbox: torch.Tensor,
     device: torch.device,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> np.ndarray:
     """
-    Generate binary mask and confidence scores for a single bounding box.
+    Generate binary mask for a single bounding box.
 
     Args:
         model: Fine-tuned SAM2 model
@@ -227,8 +227,7 @@ def generate_mask(
         device: torch device
 
     Returns:
-        binary_mask: Binary mask (H, W) as numpy array with values 0 or 1
-        confidence: Confidence scores (H, W) as float32 array in [0, 1]
+        Binary mask (H, W) as numpy array with values 0 or 1
     """
     image_tensor = image_tensor.to(device)
     bbox = bbox.to(device)
@@ -237,11 +236,11 @@ def generate_mask(
     outputs = model(image_tensor, bbox)
     pred_mask = outputs['masks']  # (1, 1, H, W)
 
-    # Apply sigmoid to get confidence scores
-    confidence = torch.sigmoid(pred_mask[0, 0]).cpu().numpy().astype(np.float32)
-    binary_mask = (confidence > 0.5).astype(np.uint8)
+    # Apply sigmoid and threshold
+    mask = torch.sigmoid(pred_mask[0, 0]).cpu().numpy()
+    binary_mask = (mask > 0.5).astype(np.uint8)
 
-    return binary_mask, confidence
+    return binary_mask
 
 
 def resize_mask_to_original(mask: np.ndarray, orig_size: Tuple[int, int]) -> np.ndarray:
@@ -289,10 +288,8 @@ def process_split(
     # Create output directories
     binary_dir = CONFIG['output_root'] / split / 'binary'
     semantic_dir = CONFIG['output_root'] / split / 'semantic'
-    confidence_dir = CONFIG['output_root'] / split / 'confidence'
     binary_dir.mkdir(parents=True, exist_ok=True)
     semantic_dir.mkdir(parents=True, exist_ok=True)
-    confidence_dir.mkdir(parents=True, exist_ok=True)
 
     # Statistics
     stats = {
@@ -372,20 +369,14 @@ def process_split(
 
             # Generate mask
             try:
-                binary_mask, confidence = generate_mask(model, image_tensor, bbox_tensor, device)
+                mask = generate_mask(model, image_tensor, bbox_tensor, device)
 
                 # Resize to original size
-                mask_orig = resize_mask_to_original(binary_mask, orig_size)
-                # Resize confidence using bilinear interpolation
-                conf_orig = cv2.resize(confidence, (orig_size[1], orig_size[0]), interpolation=cv2.INTER_LINEAR)
+                mask_orig = resize_mask_to_original(mask, orig_size)
 
                 # Save binary mask
                 binary_path = binary_dir / f"{img_stem}_{category_name}_{ann_idx}.png"
                 cv2.imwrite(str(binary_path), mask_orig * 255)
-
-                # Save confidence as float16 .npy file
-                conf_path = confidence_dir / f"{img_stem}_{category_name}_{ann_idx}.npy"
-                np.save(str(conf_path), conf_orig.astype(np.float16))
 
                 # Add to semantic mask (later classes overwrite earlier ones)
                 semantic_mask[mask_orig > 0] = category_id
