@@ -13,7 +13,7 @@ This guide provides step-by-step instructions for setting up the SAM2 fine-tunin
 ## Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/sam2-surgical-finetune.git
+git clone https://github.com/BurntSouffle/sam2-surgical-finetune.git
 cd sam2-surgical-finetune
 ```
 
@@ -203,6 +203,6 @@ After setup is complete:
 ## Support
 
 If you encounter issues:
-1. Check the [Issues](https://github.com/YOUR_USERNAME/sam2-surgical-finetune/issues) page
+1. Check the [Issues](https://github.com/BurntSouffle/sam2-surgical-finetune/issues) page
 2. Ensure all paths are correctly configured
 3. Verify CUDA and PyTorch compatibility
