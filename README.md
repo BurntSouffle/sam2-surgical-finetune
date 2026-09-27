@@ -9,7 +9,7 @@ Fine-tuning SAM2 (Segment Anything Model 2) with bounding box prompts for high-q
 | Model | Average IoU | Improvement |
 |-------|-------------|-------------|
 | Zero-shot SAM2-Large | 74.35% | baseline |
-| **Fine-tuned SAM2-Large** | **78.12%** | **+3.77%** |
+| **Fine-tuned SAM2-Large** | **78.12%** | **+3.77 percentage points** |
 
 ### Per-Class Performance
 
@@ -35,7 +35,7 @@ This project uses the [Endoscapes Dataset](https://github.com/CAMMA-public/Endos
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/sam2-surgical-finetune.git
+git clone https://github.com/BurntSouffle/sam2-surgical-finetune.git
 cd sam2-surgical-finetune
 
 # Create conda environment
@@ -148,9 +148,11 @@ python scripts/box_prompted/generate_masks.py --split test
 
 ### Data Expansion
 
+These totals represent mask generation with **box prompts**, not automatic prompt-free segmentation. Synthetic masks are model-generated and require quality checking before downstream use.
+
 - Original pixel-annotated: 493 images
 - Synthetic masks generated: 1,933 images
-- **4.6x increase in labeled data**
+- **3.9x as many images with masks** (1,933 / 493; includes synthetic masks, not new manually verified annotations)
 
 ## Citation
 
